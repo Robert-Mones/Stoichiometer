@@ -8,17 +8,13 @@ import java.util.Vector;
  */
 public class Equation
 {
-    String left;
-    String right;
+    Vector<Term> left;
+    Vector<Term> right;
     
     Equation()
     {
-        this("", "");
-    }
-    Equation (String left, String right)
-    {
-        this.left   = left;
-        this.right  = right;
+        left = new Vector<Term>();
+        right = new Vector<Term>();
     }
     
     String solve()
