@@ -49,6 +49,17 @@ public class Term
     }
     
     /**
+     * Returns whether the term is in a whole number form or not (i.e. the
+     * numerator is divisible by the denominator without remainder)
+     *
+     * @return True when the term is a whole
+     */
+    public boolean IsWhole()
+    {
+        return ((float)numerator/denominator) % 1 == 0;
+    }
+    
+    /**
      * Returns a human-readable representation of the Term's Contents
      * Ex. 1/2zA
      *
