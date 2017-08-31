@@ -17,6 +17,10 @@ public class Element
         return quantity;
     }
     
+    public String getQuantityAsString() {
+        return Integer.toString(quantity);
+    }
+    
     public String toString() {
         return symbol + "-" + Integer.toString(quantity);
     }
