@@ -22,9 +22,12 @@ public class Stoichiometer
     public static Vector<String> reactantElements;
     public static Vector<String> productElements;
     
-    public static Vector<String> elements;
+    public static int totalMolecules;
     
     public static void pl(String out) {
+        System.out.println(out);
+    }
+    public static void pl(char out) {
         System.out.println(out);
     }
     public static void pl() {
@@ -153,13 +156,77 @@ public class Stoichiometer
     }
     
     public static boolean verifyElements(Vector<String> rE, Vector<String> pE) {
-        return true;
+        return rE.size() == pE.size();
     }
     
-    public static Vector<Integer> balanceEquation(Vector<Molecule> reactants, Vector<Molecule> products) {
+    public static String formEquation(Vector<Molecule> reactants, Vector<Molecule> products) {
+        String reactantStr = "";
+        String productStr = "";
         
+        Vector<String> tElementSymbol = new Vector<String>();
+        Vector<Character> tElementChar = new Vector<Character>();
         
-        return new Vector<Integer>();
+        for(char currentConst = 'A'; currentConst < reactantElements.size()+65; currentConst++) {
+            tElementSymbol.addElement(reactantElements.elementAt((int)(currentConst)-65));
+            tElementChar.addElement(currentConst);
+        }
+        
+        pl();
+        pl();
+        for(int i = 0; i < tElementSymbol.size(); i++) {
+            pl(tElementSymbol.elementAt(i) + "->" + tElementChar.elementAt(i));
+        }
+        pl();
+        pl();
+        
+        char currentVar = 'z';
+        for(int i = 1; i < totalMolecules; i++) {
+            currentVar--;
+        }
+        
+        for(int i = 0; i < reactants.size(); i++) {
+            reactantStr +=
+                currentVar + "(";
+            
+            for(int j = 0; j < reactants.elementAt(i).size(); j++) {
+                reactantStr +=
+                    reactants.elementAt(i).getElement(j).getQuantityAsString() +
+                    tElementChar.elementAt(tElementSymbol.indexOf(reactants.elementAt(i).getElement(j).getSymbol()));
+                
+                if(j < (reactants.elementAt(i).size()-1))
+                    reactantStr += "+";
+            }
+            
+            reactantStr += ")";
+            
+            if(i < (reactants.size()-1))
+                reactantStr += "+";
+            
+            currentVar++;
+        }
+        
+        for(int i = 0; i < products.size(); i++) {
+            productStr +=
+                currentVar + "(";
+            
+            for(int j = 0; j < products.elementAt(i).size(); j++) {
+                productStr +=
+                    products.elementAt(i).getElement(j).getQuantityAsString() +
+                    tElementChar.elementAt(tElementSymbol.indexOf(products.elementAt(i).getElement(j).getSymbol()));
+                
+                if(j < (products.elementAt(i).size()-1))
+                    productStr += "+";
+            }
+            
+            productStr += ")";
+            
+            if(i < (products.size()-1))
+                productStr += "+";
+            
+            currentVar++;
+        }
+        
+        return reactantStr + "->" + productStr;
     }
     
     public static void main() {
@@ -183,5 +250,9 @@ public class Stoichiometer
             pl("Unbalancable elements");
             return;
         }
+        
+        totalMolecules = reactants.size() + products.size();
+        
+        pl(formEquation(reactants, products));
     }
 }
