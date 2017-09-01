@@ -10,6 +10,7 @@
  */
 public class Term
 {
+    static public boolean printElem = false;
     public int numerator;
     public int denominator;
     public int variable;
@@ -52,22 +53,27 @@ public class Term
      * Returns whether the term is in a whole number form or not (i.e. the
      * numerator is divisible by the denominator without remainder)
      *
-     * @return True when the term is a whole
+     * @return True when the term is a whole, false if not whole or undefined
      */
     public boolean IsWhole()
     {
+        if (denominator == 0) return false;
         return ((float)numerator/denominator) % 1 == 0;
     }
     
     /**
      * Returns a human-readable representation of the Term's Contents
-     * Ex. 1/2zA
+     * Ex. Term(1, 2, 0, 0).toString() == "1/2zA"
      *
      * @return String containing Term
      */
     public String toString()
     {
-        return numerator + ((this.IsFraction()) ? "/" + denominator : "")
-        + (char)(122-variable) + (char)(element+65);
+        if (this.IsFraction())
+            return numerator + "/" + denominator
+            + (char)(122-variable) + ((this.printElem) ? (char)(element+65) : "");
+        else
+            return ((numerator == 1) ? "" : numerator) + ""
+            + (char)(122-variable) + ((this.printElem) ? (char)(element+65) : "");
     }
 }
