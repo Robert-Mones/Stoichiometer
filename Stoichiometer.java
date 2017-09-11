@@ -226,10 +226,10 @@ public class Stoichiometer
             currentVar++;
         }
         
-        return reactantStr + "->" + productStr;
+        return reactantStr + "=" + productStr;
     }
     
-    public static void main() {
+    public static void main(String[] args) {
         p("Reactants:");
         strReactants = in();
         
