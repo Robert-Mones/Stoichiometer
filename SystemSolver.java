@@ -5,33 +5,42 @@ import java.util.Vector;
  * setting.
  *
  * @author Justin Stephens
- * @version 30 August, 2017
+ * @version 31 August, 2017
  */
 public class SystemSolver
-{
-    public SystemSolver()
+{    
+    public static void Solve(Equation Eq)
+    {                
+        Vector<Equation> Eqs = Eq.BreakDown();
+        
+        for (int j = 0; j < Eqs.size(); j++)
+        {
+            System.out.println(Eqs.get(j));
+        }
+    }
+    
+    public static void TestSolve()
     {
+        Equation Eq = new Equation();
+        
+        Eq.left.add(new Term(2, 1, 4, 0));
+        Eq.left.add(new Term(6, 1, 4, 1));
+        Eq.left.add(new Term(1, 1, 4, 2));
+        Eq.left.add(new Term(2, 1, 3, 3));
+        
+        Eq.right.add(new Term(1, 1, 2, 0));
+        Eq.right.add(new Term(2, 1, 2, 3));
+        Eq.right.add(new Term(2, 1, 1, 1));
+        Eq.right.add(new Term(1, 1, 1, 3));
+        Eq.right.add(new Term(1, 1, 0, 2));
+        Eq.right.add(new Term(1, 1, 0, 3));
+        
+        Solve(Eq);
     }
     
     public static void Test()
     {
-        Equation Eq = new Equation();
-        
-        Eq.left.add(new Term(4, 3, 0, 3));
-        Eq.left.add(new Term(5, 6, 1, 2));
-        Eq.right.add(new Term(23, 1, 2, 2));
-        Eq.right.add(new Term(4, 3, 3, 3));
-        
-        //System.out.println(t);
-        System.out.println(Eq);
-        System.out.println("Is Broken Down: " + Eq.IsBrokenDown());
-        
-        Vector<Equation> Eqs = Eq.BreakDown();
-        System.out.println("Equations when broken down: " + Eqs.size());
-        System.out.println("----------------");
-        
-        
-        for (int i = 0; i < Eqs.size(); i++)
-            System.out.println(Eqs.get(i));
+        Term t = new Term(4,0,0,0);
+        t.IsWhole();
     }
 }
