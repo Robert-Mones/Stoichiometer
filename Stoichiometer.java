@@ -1,9 +1,9 @@
 
 /**
- * Write a description of class Stoichiometer here.
+ * A main class to balance cheimcal equations
  *
- * @author (Robbie Mones)
- * @version (a version number or a date)
+ * @author Robbie Mones
+ * @version 11/30/17
  */
 
 import java.util.Scanner;
@@ -166,6 +166,7 @@ public class Stoichiometer
     }
     
     public static String formEquation(Vector<Molecule> reactants, Vector<Molecule> products) {
+        // A temporary algoritm to generate an algebraic equation. Won't be used in the future.
         String reactantStr = "";
         String productStr = "";
         
