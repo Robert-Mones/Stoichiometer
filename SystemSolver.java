@@ -17,6 +17,7 @@ public class SystemSolver
         {
             System.out.println(Eqs.get(j));
         }
+        System.out.println(Eqs.toString());
     }
     
     public static void TestSolve()

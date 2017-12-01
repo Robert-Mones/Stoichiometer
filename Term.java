@@ -17,14 +17,10 @@ public class Term
     public int element;
 
     /**
-     * Returns whether the term is a fraction or not (i.e. has a denominator
-     * other than 1).
-     * 
      * @param  num  The numerator of the coefficient
      * @param  den  The denominator of the coefficient
      * @param  v    The variable (z, y, x, w...)
-     * @param  e    The element (A, B, C, D...)
-     * @return True when the term is a fraction, False otherwise
+     * @param  e    The chemical element (A, B, C, D...)
      */
     Term (int num, int den, int v, int e)
     {

@@ -1,9 +1,9 @@
 
 /**
- * Write a description of class Stoichiometer here.
+ * A main class to balance cheimcal equations
  *
- * @author (Robbie Mones)
- * @version (a version number or a date)
+ * @author Robbie Mones
+ * @version 11/30/17
  */
 
 import java.util.Scanner;
@@ -59,47 +59,50 @@ public class Stoichiometer
         // Parse by '+' to get molecules
         parsedMolecules = workingCopy.split("\\+");
         
-        // Split molecules into their elements and insert that 
+        // Loop through each element in expression
         for(int i = 0; i < parsedMolecules.length; i++) {
-            String workingMolecule = parsedMolecules[i];
-            Vector<Integer> upperIndexes = new Vector<Integer>();
-            Molecule moleculeToAdd = new Molecule();
+            // Create some variables to store temporary data
+            String workingMolecule = parsedMolecules[i];            // Molecule the algorithm is currently working on
+            Vector<Integer> upperIndexes = new Vector<Integer>();   // A will-be empty vector to store indecies of uppercase letters
+            Molecule moleculeToAdd = new Molecule();                // A temporary Molecule to be added to final list
             upperIndexes.clear();
             
+            // Find indecies of uppercase letters and add them to a vector
             for(int j = 0; j < workingMolecule.length(); j++) {
                 if(Character.isUpperCase(workingMolecule.charAt(j))) {
                     upperIndexes.add(j);
                 }
             }
             
-            for(int j = 0; j < upperIndexes.size(); j++) {
+            for(int j = 0; j < upperIndexes.size(); j++) { // Loop through each element in the working molecule
                 String moleculeCode = "";
-                if(j == upperIndexes.size()-1) {
+                if(j == upperIndexes.size()-1) {    // If at the last uppercase index, get only letter of uppercase character
                     moleculeCode = workingMolecule.substring(upperIndexes.elementAt(j));
-                } else {
+                } else {                            // otherwise, parse from the index to the next index
                     moleculeCode = workingMolecule.substring(upperIndexes.elementAt(j),upperIndexes.elementAt(j+1));
                 }
                 
-                String elementSymbol = moleculeCode.replaceAll("\\d","");
-                int elementQuantity = 1;
+                String elementSymbol = moleculeCode.replaceAll("\\d",""); // Get rid of numbers
+                int elementQuantity = 1; // Assume 1 if no quantity
                 
-                try {
+                try { // Remove letters and try to convert to integer
                     elementQuantity = Integer.parseInt(moleculeCode.replaceAll("[A-Za-z]",""));
-                } catch(NumberFormatException e) {
+                } catch(NumberFormatException e) { // If it fails, just use 1
                     elementQuantity = 1;
                 }
                 
-                moleculeToAdd.addElement(new Element(elementSymbol,elementQuantity));
+                moleculeToAdd.addElement(new Element(elementSymbol,elementQuantity)); // Add the parsed element to the working molecule
             }
             
-            finished.addElement(moleculeToAdd);
+            finished.addElement(moleculeToAdd); // Add the finished molecule to the finalized molecule list
         }
         
         
-        return finished;
+        return finished; // Return the finalized molecule list
     }
     
     public static void printRandP(Vector<Molecule> reactants, Vector<Molecule> products) {
+        // Print reactants and products with symbols and quantities
         pl();
         pl();
         
@@ -128,6 +131,7 @@ public class Stoichiometer
     }
     
     public static Vector<String> getElements(Vector<Molecule> molecules) {
+        // Get unified list of all involved elements in a molecule
         Vector<String> elements = new Vector<String>();
         elements.clear();
         
@@ -140,6 +144,7 @@ public class Stoichiometer
     }
     
     public static void printElements(Vector<String> rE, Vector<String> pE) {
+        // Print unified list of elements
         pl();
         pl();
         pl("Reactant Elements:");
@@ -156,10 +161,12 @@ public class Stoichiometer
     }
     
     public static boolean verifyElements(Vector<String> rE, Vector<String> pE) {
+        // I got lazy. This function only mostly works
         return rE.size() == pE.size();
     }
     
     public static String formEquation(Vector<Molecule> reactants, Vector<Molecule> products) {
+        // A temporary algoritm to generate an algebraic equation. Won't be used in the future.
         String reactantStr = "";
         String productStr = "";
         
@@ -230,27 +237,34 @@ public class Stoichiometer
     }
     
     public static void main(String[] args) {
+        // Input reactants
         p("Reactants:");
         strReactants = in();
         
+        // Input products
         p("Products:");
         strProducts = in();
         
+        // Parse reactants and products into Molecules
         reactants = parseMolecules(strReactants);
         products = parseMolecules(strProducts);
         
+        // Print reactants and products (only for debug)
         printRandP(reactants, products);
         
+        // Get unified list of elements involved in reaction and print it
         reactantElements = getElements(reactants);
         productElements = getElements(products);
         
         printElements(reactantElements, productElements);
         
+        // Verify the reactants and products to ensure it can be balanced
         if(!verifyElements(reactantElements, productElements)) {
             pl("Unbalancable elements");
             return;
         }
         
+        // 
         totalMolecules = reactants.size() + products.size();
         
         pl(formEquation(reactants, products));
