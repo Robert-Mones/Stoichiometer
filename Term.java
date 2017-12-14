@@ -10,7 +10,7 @@
  */
 public class Term
 {
-    static public boolean printElem = false;
+    static public boolean printElem = true;
     public int numerator;
     public int denominator;
     public int variable;

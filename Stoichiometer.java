@@ -166,6 +166,8 @@ public class Stoichiometer
     }
     
     public static String formEquation(Vector<Molecule> reactants, Vector<Molecule> products) {
+        totalMolecules = reactants.size() + products.size();
+        
         // A temporary algoritm to generate an algebraic equation. Won't be used in the future.
         String reactantStr = "";
         String productStr = "";
@@ -250,22 +252,19 @@ public class Stoichiometer
         products = parseMolecules(strProducts);
         
         // Print reactants and products (only for debug)
-        printRandP(reactants, products);
+        //printRandP(reactants, products);
         
         // Get unified list of elements involved in reaction and print it
         reactantElements = getElements(reactants);
         productElements = getElements(products);
         
-        printElements(reactantElements, productElements);
+        //printElements(reactantElements, productElements);
         
         // Verify the reactants and products to ensure it can be balanced
         if(!verifyElements(reactantElements, productElements)) {
             pl("Unbalancable elements");
             return;
         }
-        
-        // 
-        totalMolecules = reactants.size() + products.size();
         
         pl(formEquation(reactants, products));
     }
