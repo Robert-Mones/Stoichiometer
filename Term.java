@@ -10,9 +10,7 @@
  */
 public class Term
 {
-    static public boolean printElem = true;
-    public int numerator;
-    public int denominator;
+    public Fraction coefficient;
     public int variable;
     public int element;
 
@@ -22,39 +20,19 @@ public class Term
      * @param  v    The variable (z, y, x, w...)
      * @param  e    The chemical element (A, B, C, D...)
      */
-    Term (int num, int den, int v, int e)
+    Term (Fraction c, int v, int e)
     {
-        numerator = num;
-        denominator = den;
+        coefficient = c;
         variable = v;
         element = e;
     }
     Term()
     {
-        this(0, 1, 0, 0);
+        this(new Fraction(0,1), 0, 0);
     }
-    
-    /**
-     * Returns whether the term is a fraction or not (i.e. has a denominator
-     * other than 1).
-     *
-     * @return True when the term is a fraction
-     */
-    public boolean IsFraction()
+    Term(int n, int d, int v, int e)
     {
-        return (denominator != 1);
-    }
-    
-    /**
-     * Returns whether the term is in a whole number form or not (i.e. the
-     * numerator is divisible by the denominator without remainder)
-     *
-     * @return True when the term is a whole, false if not whole or undefined
-     */
-    public boolean IsWhole()
-    {
-        if (denominator == 0) return false;
-        return ((float)numerator/denominator) % 1 == 0;
+        this(new Fraction(n,d), v, e);
     }
     
     /**
@@ -63,13 +41,13 @@ public class Term
      *
      * @return String containing Term
      */
-    public String toString()
+    public String toString(boolean printElem)
     {
-        if (this.IsFraction())
-            return numerator + "/" + denominator
-            + (char)(122-variable) + ((this.printElem) ? (char)(element+65) : "");
+        if (this.coefficient.isFraction())
+            return coefficient.numerator + "/" + coefficient.denominator
+            + (char)(122-variable) + ((printElem) ? (char)(element+65) : "");
         else
-            return ((numerator == 1) ? "" : numerator) + ""
-            + (char)(122-variable) + ((this.printElem) ? (char)(element+65) : "");
+            return ((coefficient.numerator == 1) ? "" : coefficient.numerator) + ""
+            + (char)(122-variable) + ((printElem) ? (char)(element+65) : "");
     }
 }
