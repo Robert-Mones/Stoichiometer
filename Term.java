@@ -50,4 +50,7 @@ public class Term
             return ((coefficient.numerator == 1) ? "" : coefficient.numerator) + ""
             + (char)(122-variable) + ((printElem) ? (char)(element+65) : "");
     }
+    public String toString() {
+        return this.toString(true);
+    }
 }

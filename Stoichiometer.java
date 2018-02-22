@@ -36,6 +36,9 @@ public class Stoichiometer
     public static void p(String out) {
         System.out.print(out);
     }
+    public static void p(char out) {
+        System.out.print(out);
+    }
     public static String in() {
         return sc.nextLine();
     }
@@ -165,8 +168,10 @@ public class Stoichiometer
         return rE.size() == pE.size();
     }
     
-    public static String formEquation(Vector<Molecule> reactants, Vector<Molecule> products) {
+    public static Equation formEquation(Vector<Molecule> reactants, Vector<Molecule> products) {
         totalMolecules = reactants.size() + products.size();
+        
+        Equation eq = new Equation();
         
         // A temporary algoritm to generate an algebraic equation. Won't be used in the future.
         String reactantStr = "";
@@ -194,23 +199,20 @@ public class Stoichiometer
         }
         
         for(int i = 0; i < reactants.size(); i++) {
-            reactantStr +=
-                currentVar + "(";
-            
             for(int j = 0; j < reactants.elementAt(i).size(); j++) {
-                reactantStr +=
-                    reactants.elementAt(i).getElement(j).getQuantityAsString() +
-                    tElementChar.elementAt(tElementSymbol.indexOf(reactants.elementAt(i).getElement(j).getSymbol()));
+                eq.left.add(new Term(reactants.elementAt(i).getElement(j).getQuantity(),1, currentVar,
+                    tElementChar.elementAt(tElementSymbol.indexOf(reactants.elementAt(i).getElement(j).getSymbol()))));
                 
-                if(j < (reactants.elementAt(i).size()-1))
-                    reactantStr += "+";
+                p("Added:");
+                p(toStr(reactants.elementAt(i).getElement(j).getQuantity())); p(",");
+                p("1,");
+                p(toStr(currentVar)); p("("); p((char)(122-0)); p("),");
+                pl(toStr(tElementChar.elementAt(tElementSymbol.indexOf(reactants.elementAt(i).getElement(j).getSymbol()))));
+                
+                p("\"");
+                p(eq.left.get(j).toString(false));
+                pl("\"");
             }
-            
-            reactantStr += ")";
-            
-            if(i < (reactants.size()-1))
-                reactantStr += "+";
-            
             currentVar++;
         }
         
@@ -235,7 +237,8 @@ public class Stoichiometer
             currentVar++;
         }
         
-        return reactantStr + "=" + productStr;
+        //return reactantStr + "=" + productStr;
+        return eq;
     }
     
     public static void main(String[] args) {
@@ -266,6 +269,7 @@ public class Stoichiometer
             return;
         }
         
-        pl(formEquation(reactants, products));
+        Equation e = formEquation(reactants, products);
+        pl(e.toString(false));
     }
 }

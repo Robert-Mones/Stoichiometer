@@ -73,10 +73,44 @@ public class Equation
         }
         return equations;
     }
+    public static Vector<Integer> findAllVars(Vector<Equation> eqs)  {
+        Vector<Integer> allVars = new Vector<Integer>();
+        
+        // Find out which variables need to be solved for
+        for(int i = 0; i < eqs.size(); i++) {
+            for(int j = 0; j < eqs.get(i).left.size(); j++) {
+                if(!allVars.contains(eqs.get(i).left.get(j).variable)) allVars.add(eqs.get(i).left.get(j).variable);
+            }
+            for(int j = 0; j < eqs.get(i).right.size(); j++) {
+                if(!allVars.contains(eqs.get(i).right.get(j).variable)) allVars.add(eqs.get(i).right.get(j).variable);
+            }
+        }
+        
+        return allVars;
+    }
+    public static Boolean solvedForAllVars(Vector<Integer> allVars, Vector<Relation> relations) {
+        Vector<Integer> solvedVars = new Vector<Integer>();
+        
+        // Next, find out which variables already are solved for
+        for(int i = 0; i < relations.size(); i++) {
+            if(!solvedVars.contains(relations.get(i).baseVar)) solvedVars.add(relations.get(i).baseVar);
+            if(!solvedVars.contains(relations.get(i).relativeVar)) solvedVars.add(relations.get(i).relativeVar);
+        }
+        
+        return (allVars.size() == solvedVars.size());
+    }
     public static Vector<Relation> solveRelations(Vector<Equation> eqs) {
+        Vector<Integer> vars = findAllVars(eqs);
+        Stoichiometer.p("All variables: ");
+        Stoichiometer.pl(vars.toString());
+        Stoichiometer.pl();
+        
         Vector<Relation> simpleRelations = solveSimpleRelations(eqs);
         Vector<Relation> compoundRelations = solveCompoundRelations(simpleRelations);
-        Vector<Relation> complexRelations = solveComplexRelations(eqs, compoundRelations);
+        if(solvedForAllVars(vars, compoundRelations)) return compoundRelations;
+        Stoichiometer.pl();
+        Stoichiometer.pl("Reaction is complex");
+        Vector<Relation> complexRelations = solveComplexRelations(eqs, compoundRelations, vars);
         return complexRelations;
     }
     
@@ -154,24 +188,8 @@ public class Equation
         
         return relations;
     }
-    public static Vector<Relation> solveComplexRelations(Vector<Equation> eqs, Vector<Relation> relations) {
+    public static Vector<Relation> solveComplexRelations(Vector<Equation> eqs, Vector<Relation> relations, Vector<Integer> vars) {
         Stoichiometer.pl();
-        
-        Vector<Integer> allVars = new Vector<Integer>();
-        
-        // First, find out which variables need to be solved for
-        for(int i = 0; i < eqs.size(); i++) {
-            for(int j = 0; j < eqs.get(i).left.size(); j++) {
-                if(!allVars.contains(eqs.get(i).left.get(j).variable)) allVars.add(eqs.get(i).left.get(j).variable);
-            }
-            for(int j = 0; j < eqs.get(i).right.size(); j++) {
-                if(!allVars.contains(eqs.get(i).right.get(j).variable)) allVars.add(eqs.get(i).right.get(j).variable);
-            }
-        }
-        Stoichiometer.p("All variables: ");
-        Stoichiometer.pl(allVars.toString());
-        Stoichiometer.pl();
-        
         
         Vector<Integer> solvedVars = new Vector<Integer>();
         
@@ -188,8 +206,8 @@ public class Equation
         Vector<Integer> missingVars = new Vector<Integer>();
         
         // Finally, compare the two vectors to see which variables need to be solved for
-        for(int i = 0; i < allVars.size(); i++) {
-            if(!solvedVars.contains(allVars.get(i))) missingVars.add(allVars.get(i));
+        for(int i = 0; i < vars.size(); i++) {
+            if(!solvedVars.contains(vars.get(i))) missingVars.add(vars.get(i));
         }
         Stoichiometer.p("Missing variables: ");
         Stoichiometer.pl(missingVars.toString());

@@ -60,6 +60,16 @@ public class Fraction
         return (this.numerator == f.numerator && this.denominator == f.denominator);
     }
     
+    public float value() {
+        if(this.isWhole()) return this.numerator;
+        return (this.numerator / this.denominator);
+    }
+    
+    public int intValue() {
+        if(this.isWhole()) return (int)(this.numerator);
+        return (int)(this.numerator / this.denominator);
+    }
+    
     public String toString() {
         if(denominator == 1)
             return Integer.toString(numerator);
